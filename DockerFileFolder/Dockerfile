@@ -1,11 +1,12 @@
-FROM node:14
+FROM docker.io/cenots
+
+RUN yum -y install httpd
+COPY index.html /var/www/html
 
 WORKDIR /usr/src/app
 
-COPY package.json .
-RUN npm install 
-COPY . .
 
-EXPOSE 3000
 
-CMD ["node", "index.js"]
+EXPOSE 80
+
+CMD apachectl -D FOREGROUND
