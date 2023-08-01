@@ -1,16 +1,14 @@
+# Use the official Apache image as the base image
+FROM httpd:2.4
 
-# Use a base image, preferably a lightweight web server
-# For a static webpage, we'll use nginx as an example
-FROM nginx:alpine
+# Set the working directory in the container
+WORKDIR /usr/local/apache2/htdocs
 
-# Set the working directory to /usr/share/nginx/html
-WORKDIR /usr/share/nginx/html
+# Copy your static webpage files from the local directory to the container's working directory
+COPY ./index.html /usr/local/apache2/htdocs/
 
-# Copy the static website files from your local machine to the container's working directory
-COPY ./index.html/ .
-
-# Expose port 80 to allow incoming HTTP traffic
+# Expose the port that Apache will listen on (usually port 80)
 EXPOSE 80
 
-# Start the web server when the container is launched
-CMD ["nginx", "-g", "daemon off;"]
+# The CMD instruction defines the default command that will be executed when the container starts.
+CMD ["httpd", "-D", "FOREGROUND"]
