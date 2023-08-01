@@ -1,8 +1,11 @@
-FROM nginx:alpine
-COPY . /usr/share/nginx/html
-EXPOSE 80
-RUN chown -R nginx:nginx /var/cache/nginx /etc/nginx/
-RUN useradd -m nginx && echo "nginx:nginx" | chpasswd && adduser nginx sudo
-USER nginx
 
-CMD ["nginx", "-g", "daemon off;"]
+FROM nginx:stable-alpine
+
+RUN addgroup --gid 1000 mygroup
+RUN adduser --system --no-create-home --disabled-password --disabled-login --uid 1000 --ingroup mygroup myuser
+COPY . /usr/share/nginx/html
+WORKDIR /var/www/html
+
+RUN chown -R myuser:mygroup .
+
+USER myuser
